@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You Escaped!</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="victory-page">
+    <div class="confetti" id="confetti"></div>
+
+    <div class="victory-container">
+        <div class="trophy-icon">&#127942;</div>
+        <h1 class="victory-title">YOU ESCAPED!</h1>
+        <p class="victory-subtitle" th:text="'Congratulations, ' + ${session.playerName} + '!'">Congratulations!</p>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" th:text="${session.totalScore}">0</div>
+                <div class="stat-label">Total Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" th:text="${session.elapsedTime}">00:00</div>
+                <div class="stat-label">Time Taken</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" th:text="${session.totalHintsUsed}">0</div>
+                <div class="stat-label">Hints Used</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" th:text="${session.totalAttempts}">0</div>
+                <div class="stat-label">Total Attempts</div>
+            </div>
+        </div>
+
+        <div class="rank-section">
+            <h2>Your Rank</h2>
+            <div class="rank-badge" id="rankBadge">
+                <span class="rank-icon" id="rankIcon"></span>
+                <span class="rank-name" id="rankName"></span>
+            </div>
+        </div>
+
+        <div class="victory-actions">
+            <a href="/" class="btn-play-again">Play Again</a>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        const score = [[${session.totalScore}]];
+        const hintsUsed = [[${session.totalHintsUsed}]];
+        const rankIcon = document.getElementById('rankIcon');
+        const rankName = document.getElementById('rankName');
+
+        // Determine rank based on score and hints
+        if (score >= 400 && hintsUsed === 0) {
+            rankIcon.textContent = '\uD83D\uDC51';
+            rankName.textContent = 'MASTER ESCAPIST';
+        } else if (score >= 350) {
+            rankIcon.textContent = '\u2B50';
+            rankName.textContent = 'EXPERT SOLVER';
+        } else if (score >= 250) {
+            rankIcon.textContent = '\uD83D\uDD11';
+            rankName.textContent = 'SKILLED DETECTIVE';
+        } else if (score >= 150) {
+            rankIcon.textContent = '\uD83D\uDD0D';
+            rankName.textContent = 'PUZZLE APPRENTICE';
+        } else {
+            rankIcon.textContent = '\uD83C\uDF31';
+            rankName.textContent = 'LUCKY ESCAPEE';
+        }
+
+        // Confetti animation
+        const confettiContainer = document.getElementById('confetti');
+        const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FF69B4'];
+        for (let i = 0; i < 100; i++) {
+            const piece = document.createElement('div');
+            piece.className = 'confetti-piece';
+            piece.style.left = Math.random() * 100 + '%';
+            piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            piece.style.animationDelay = Math.random() * 3 + 's';
+            piece.style.animationDuration = (2 + Math.random() * 3) + 's';
+            confettiContainer.appendChild(piece);
+        }
+    </script>
+</body>
+</html>

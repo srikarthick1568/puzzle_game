@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Escape - ' + ${room.name}">Puzzle Escape Game</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body th:class="'game-page theme-' + ${room.theme}">
+
+    <!-- Top HUD Bar -->
+    <div class="hud-bar">
+        <div class="hud-left">
+            <span class="hud-player" th:text="'&#128100; ' + ${session.playerName}">Player</span>
+            <span class="hud-room" th:text="'Room ' + ${roomNumber} + '/' + ${totalRooms}">Room 1/3</span>
+        </div>
+        <div class="hud-center">
+            <span class="hud-timer" id="timer">&#9201; 00:00</span>
+        </div>
+        <div class="hud-right">
+            <span class="hud-score" id="score">&#127942; 0 pts</span>
+            <span class="hud-hints" id="hintsCount" th:text="'&#128161; ' + ${session.totalHintsUsed} + ' hints'">0 hints</span>
+        </div>
+    </div>
+
+    <!-- Room Header -->
+    <div class="room-header">
+        <h1 class="room-name" th:text="${room.name}">Room Name</h1>
+        <p class="room-description" th:text="${room.description}">Room description...</p>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"
+                 th:style="'width:' + ${room.puzzles.size() > 0 ? (room.solvedCount * 100) / room.puzzles.size() : 0} + '%'"></div>
+            <span class="progress-text" th:text="${room.solvedCount} + '/' + ${room.puzzles.size()} + ' puzzles solved'">0/3 solved</span>
+        </div>
+    </div>
+
+    <!-- Puzzle Cards -->
+    <div class="puzzles-container">
+        <div th:each="puzzle : ${room.puzzles}" class="puzzle-card"
+             th:classappend="${puzzle.solved} ? ' solved' : ''"
+             th:id="'puzzle-' + ${puzzle.id}">
+
+            <div class="puzzle-header">
+                <div class="puzzle-type-badge" th:text="${puzzle.type}">RIDDLE</div>
+                <div class="puzzle-points" th:text="${puzzle.points} + ' pts'">50 pts</div>
+                <div class="puzzle-status">
+                    <span th:if="${puzzle.solved}" class="status-solved">&#9989; SOLVED</span>
+                    <span th:unless="${puzzle.solved}" class="status-unsolved">&#128274; LOCKED</span>
+                </div>
+            </div>
+
+            <h3 class="puzzle-title" th:text="${puzzle.title}">Puzzle Title</h3>
+            <p class="puzzle-flavor" th:text="${puzzle.description}">Flavor text...</p>
+
+            <div class="puzzle-question">
+                <p th:text="${puzzle.question}">Question text...</p>
+            </div>
+
+            <div th:unless="${puzzle.solved}" class="puzzle-actions">
+                <div class="answer-group">
+                    <input type="text" class="answer-input"
+                           th:id="'answer-' + ${puzzle.id}"
+                           placeholder="Enter your answer..."
+                           autocomplete="off"
+                           th:data-puzzle-id="${puzzle.id}">
+                    <button class="btn-submit" onclick="submitAnswer(this)"
+                            th:data-puzzle-id="${puzzle.id}">
+                        SUBMIT
+                    </button>
+                </div>
+                <div class="puzzle-tools">
+                    <button class="btn-hint" onclick="getHint(this)"
+                            th:data-puzzle-id="${puzzle.id}">
+                        &#128161; Get Hint
+                        <span class="hint-count" th:text="'(' + ${puzzle.hintsUsed} + '/3)'"> (0/3)</span>
+                    </button>
+                </div>
+                <div class="hint-display" th:id="'hint-' + ${puzzle.id}" style="display:none;"></div>
+                <div class="feedback-message" th:id="'feedback-' + ${puzzle.id}"></div>
+            </div>
+
+            <div th:if="${puzzle.solved}" class="solved-overlay">
+                <div class="solved-check">&#10004;</div>
+                <p>Puzzle Complete!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Next Room Button -->
+    <div class="next-room-section" id="nextRoomSection" style="display:none;">
+        <div class="room-complete-message">
+            <h2>&#127881; Room Cleared!</h2>
+            <p>All puzzles solved! The passage to the next room is revealed...</p>
+        </div>
+        <button class="btn-next-room" id="btnNextRoom" onclick="goToNextRoom()">
+            Proceed to Next Room &#10140;
+        </button>
+    </div>
+
+    <script th:inline="javascript">
+        const SESSION_ID = [[${session.sessionId}]];
+        const TOTAL_PUZZLES = [[${room.puzzles.size()}]];
+        let solvedCount = [[${room.solvedCount}]];
+        let totalScore = 0;
+        let totalHints = [[${session.totalHintsUsed}]];
+
+        // Timer — use server elapsed seconds so it persists across room navigation
+        const serverElapsedSeconds = [[${session.elapsedSeconds}]];
+        const pageLoadTime = Date.now();
+        function updateTimer() {
+            const additionalSeconds = Math.floor((Date.now() - pageLoadTime) / 1000);
+            const totalElapsed = serverElapsedSeconds + additionalSeconds;
+            const mins = String(Math.floor(totalElapsed / 60)).padStart(2, '0');
+            const secs = String(totalElapsed % 60).padStart(2, '0');
+            document.getElementById('timer').textContent = '\u23F1 ' + mins + ':' + secs;
+        }
+        updateTimer();
+        setInterval(updateTimer, 1000);
+
+        // Enter key support
+        document.querySelectorAll('.answer-input').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const btn = this.parentElement.querySelector('.btn-submit');
+                    btn.click();
+                }
+            });
+        });
+
+        async function submitAnswer(btn) {
+            const puzzleId = btn.dataset.puzzleId;
+            const input = document.getElementById('answer-' + puzzleId);
+            const answer = input.value.trim();
+            const feedback = document.getElementById('feedback-' + puzzleId);
+
+            if (!answer) {
+                feedback.textContent = 'Please enter an answer!';
+                feedback.className = 'feedback-message error';
+                feedback.style.display = 'block';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = '...';
+
+            try {
+                const res = await fetch('/api/game/' + SESSION_ID + '/solve', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ puzzleId: puzzleId, answer: answer })
+                });
+                const data = await res.json();
+
+                feedback.style.display = 'block';
+
+                if (data.success) {
+                    feedback.textContent = data.message;
+                    feedback.className = 'feedback-message success';
+                    totalScore += data.points;
+                    document.getElementById('score').textContent = '\uD83C\uDFC6 ' + totalScore + ' pts';
+
+                    // Animate puzzle card to solved state
+                    const card = document.getElementById('puzzle-' + puzzleId);
+                    card.classList.add('solved', 'just-solved');
+
+                    // Hide input/buttons and show solved overlay
+                    const actions = card.querySelector('.puzzle-actions');
+                    if (actions) actions.style.display = 'none';
+                    const overlay = document.createElement('div');
+                    overlay.className = 'solved-overlay fade-in';
+                    overlay.innerHTML = '<div class="solved-check">&#10004;</div><p>Puzzle Complete!</p>';
+                    card.appendChild(overlay);
+
+                    solvedCount = data.solvedCount;
+                    const progress = (solvedCount / TOTAL_PUZZLES) * 100;
+                    document.getElementById('progressFill').style.width = progress + '%';
+                    document.querySelector('.progress-text').textContent =
+                        solvedCount + '/' + TOTAL_PUZZLES + ' puzzles solved';
+
+                    if (data.gameComplete) {
+                        setTimeout(() => {
+                            window.location.href = '/victory/' + SESSION_ID;
+                        }, 2000);
+                    } else if (data.roomComplete) {
+                        document.getElementById('nextRoomSection').style.display = 'flex';
+                        document.getElementById('nextRoomSection').classList.add('fade-in');
+                    }
+                } else {
+                    feedback.textContent = data.message;
+                    feedback.className = 'feedback-message error';
+                    input.classList.add('shake');
+                    setTimeout(() => input.classList.remove('shake'), 500);
+                    btn.disabled = false;
+                    btn.textContent = 'SUBMIT';
+                }
+            } catch (err) {
+                feedback.textContent = 'Connection error. Try again.';
+                feedback.className = 'feedback-message error';
+                btn.disabled = false;
+                btn.textContent = 'SUBMIT';
+            }
+        }
+
+        async function getHint(btn) {
+            const puzzleId = btn.dataset.puzzleId;
+            const hintBox = document.getElementById('hint-' + puzzleId);
+
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/game/' + SESSION_ID + '/hint', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ puzzleId: puzzleId })
+                });
+                const data = await res.json();
+
+                hintBox.style.display = 'block';
+                const hintEl = document.createElement('p');
+                hintEl.className = 'hint-text fade-in';
+                hintEl.textContent = '\uD83D\uDCA1 Hint ' + data.hintsUsed + ': ' + data.hint;
+                hintBox.appendChild(hintEl);
+
+                totalHints++;
+                document.getElementById('hintsCount').textContent = '\uD83D\uDCA1 ' + totalHints + ' hints';
+
+                btn.querySelector('.hint-count').textContent = '(' + data.hintsUsed + '/' + data.maxHints + ')';
+
+                if (data.hintsUsed >= data.maxHints) {
+                    btn.disabled = true;
+                    btn.querySelector('.hint-count').textContent = '(MAX)';
+                } else {
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                btn.disabled = false;
+            }
+        }
+
+        async function goToNextRoom() {
+            const res = await fetch('/api/game/' + SESSION_ID + '/next-room', {
+                method: 'POST'
+            });
+            const data = await res.json();
+            if (data.success) {
+                window.location.href = '/game/' + SESSION_ID;
+            }
+        }
+
+        // Check if room is already complete on load
+        if (solvedCount === TOTAL_PUZZLES) {
+            const nextSection = document.getElementById('nextRoomSection');
+            if (nextSection) nextSection.style.display = 'flex';
+        }
+    </script>
+</body>
+</html>

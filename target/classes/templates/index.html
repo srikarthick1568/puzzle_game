@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzle Escape - Enter If You Dare</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="home-page">
+    <div class="particles" id="particles"></div>
+
+    <div class="home-container">
+        <div class="title-section">
+            <div class="lock-icon">&#128274;</div>
+            <h1 class="game-title">PUZZLE ESCAPE</h1>
+            <p class="game-subtitle">Three rooms. Nine puzzles. One way out.</p>
+        </div>
+
+        <div class="story-text">
+            <p>You awaken in a mysterious library with no memory of how you arrived.
+               The door behind you has vanished. Ancient magic seals every exit.
+               Only by solving the puzzles within can you hope to escape...</p>
+        </div>
+
+        <div class="rooms-preview">
+            <div class="room-preview-card">
+                <div class="room-icon">&#128218;</div>
+                <h3>The Library</h3>
+                <p>Riddles &amp; Codes</p>
+            </div>
+            <div class="room-preview-card">
+                <div class="room-icon">&#9879;</div>
+                <h3>The Lab</h3>
+                <p>Logic &amp; Math</p>
+            </div>
+            <div class="room-preview-card">
+                <div class="room-icon">&#128273;</div>
+                <h3>The Vault</h3>
+                <p>Final Challenge</p>
+            </div>
+        </div>
+
+        <form action="/start" method="post" class="start-form">
+            <div class="input-group">
+                <input type="text" name="playerName" placeholder="Enter your name, brave soul..."
+                       required minlength="2" maxlength="20" autocomplete="off">
+                <button type="submit" class="btn-start">
+                    <span>BEGIN ESCAPE</span>
+                    <span class="btn-arrow">&#10140;</span>
+                </button>
+            </div>
+        </form>
+
+        <div class="game-features">
+            <div class="feature">
+                <span class="feature-icon">&#9201;</span>
+                <span>Timed Challenge</span>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">&#128161;</span>
+                <span>Hint System</span>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">&#127942;</span>
+                <span>Score &amp; Rank</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Floating particle animation
+        const container = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 6 + 's';
+            particle.style.animationDuration = (4 + Math.random() * 8) + 's';
+            container.appendChild(particle);
+        }
+    </script>
+</body>
+</html>

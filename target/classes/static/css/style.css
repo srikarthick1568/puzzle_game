@@ -1,0 +1,857 @@
+/* ============================================
+   PUZZLE ESCAPE GAME - Complete Stylesheet
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* === Reset & Base === */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #c9a84c;
+    --primary-glow: rgba(201, 168, 76, 0.3);
+    --danger: #e74c3c;
+    --success: #2ecc71;
+    --dark-bg: #0a0a0f;
+    --card-bg: rgba(20, 20, 35, 0.9);
+    --card-border: rgba(201, 168, 76, 0.2);
+    --text-primary: #e8e6e3;
+    --text-secondary: #9a9a9a;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--dark-bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* === HOME PAGE === */
+.home-page {
+    background: linear-gradient(135deg, #0a0a0f 0%, #1a1025 50%, #0a0a0f 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    position: relative;
+}
+
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 50%;
+    opacity: 0;
+    animation: floatUp 6s infinite ease-in;
+}
+
+@keyframes floatUp {
+    0% { opacity: 0; transform: translateY(100vh) scale(0); }
+    10% { opacity: 0.8; }
+    90% { opacity: 0.2; }
+    100% { opacity: 0; transform: translateY(-20px) scale(1); }
+}
+
+.home-container {
+    text-align: center;
+    z-index: 1;
+    padding: 2rem;
+    max-width: 700px;
+}
+
+.lock-icon {
+    font-size: 4rem;
+    animation: pulse 2s infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.1); filter: brightness(1.3); }
+}
+
+.game-title {
+    font-family: 'Cinzel', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #c9a84c, #f0d78c, #c9a84c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 8px;
+    text-shadow: none;
+    margin-bottom: 0.5rem;
+}
+
+.game-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+    letter-spacing: 3px;
+    margin-bottom: 2rem;
+}
+
+.story-text {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+    font-style: italic;
+    line-height: 1.8;
+    color: var(--text-secondary);
+}
+
+.rooms-preview {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+}
+
+.room-preview-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    flex: 1;
+    transition: all 0.3s ease;
+}
+
+.room-preview-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px var(--primary-glow);
+}
+
+.room-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.room-preview-card h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    color: var(--primary);
+    margin-bottom: 0.3rem;
+}
+
+.room-preview-card p {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.start-form {
+    margin-bottom: 2rem;
+}
+
+.input-group {
+    display: flex;
+    gap: 0;
+    max-width: 480px;
+    margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--card-border);
+    transition: border-color 0.3s;
+}
+
+.input-group:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 20px var(--primary-glow);
+}
+
+.input-group input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    background: var(--card-bg);
+    border: none;
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+}
+
+.input-group input::placeholder {
+    color: var(--text-secondary);
+}
+
+.btn-start {
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #c9a84c, #a8893a);
+    color: #0a0a0f;
+    border: none;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+    letter-spacing: 1px;
+}
+
+.btn-start:hover {
+    background: linear-gradient(135deg, #f0d78c, #c9a84c);
+}
+
+.btn-arrow {
+    transition: transform 0.3s;
+}
+
+.btn-start:hover .btn-arrow {
+    transform: translateX(4px);
+}
+
+.game-features {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.feature-icon {
+    font-size: 1.1rem;
+}
+
+/* === GAME PAGE === */
+.game-page {
+    padding-bottom: 3rem;
+}
+
+/* Theme variants */
+.theme-dark-academia { --theme-accent: #c9a84c; --theme-glow: rgba(201, 168, 76, 0.15); }
+.theme-mystical { --theme-accent: #9b59b6; --theme-glow: rgba(155, 89, 182, 0.15); }
+.theme-golden { --theme-accent: #f39c12; --theme-glow: rgba(243, 156, 18, 0.15); }
+
+/* HUD Bar */
+.hud-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 2rem;
+    background: rgba(10, 10, 15, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--card-border);
+}
+
+.hud-left, .hud-center, .hud-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.hud-player {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.hud-room {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.hud-timer {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.3rem;
+    color: var(--text-primary);
+    background: var(--card-bg);
+    padding: 0.3rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+}
+
+.hud-score {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.hud-hints {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Room Header */
+.room-header {
+    text-align: center;
+    padding: 2.5rem 2rem 1.5rem;
+    background: linear-gradient(180deg, var(--theme-glow) 0%, transparent 100%);
+}
+
+.room-name {
+    font-family: 'Cinzel', serif;
+    font-size: 2.5rem;
+    color: var(--theme-accent, var(--primary));
+    margin-bottom: 0.8rem;
+    letter-spacing: 3px;
+}
+
+.room-description {
+    max-width: 650px;
+    margin: 0 auto 1.5rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-style: italic;
+}
+
+.progress-bar {
+    max-width: 400px;
+    margin: 0 auto;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 14px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--theme-accent, var(--primary)), #f0d78c);
+    border-radius: 14px;
+    transition: width 0.6s ease;
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* Puzzle Cards */
+.puzzles-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.puzzle-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 1.8rem;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.puzzle-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--theme-accent, var(--primary)), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.puzzle-card:hover::before {
+    opacity: 1;
+}
+
+.puzzle-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    border-color: var(--theme-accent, var(--primary));
+}
+
+.puzzle-card.solved {
+    border-color: var(--success);
+    opacity: 0.8;
+}
+
+.puzzle-card.solved::before {
+    background: var(--success);
+    opacity: 1;
+}
+
+.puzzle-card.just-solved {
+    animation: solvedPulse 0.8s ease;
+}
+
+@keyframes solvedPulse {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.03); box-shadow: 0 0 40px rgba(46, 204, 113, 0.4); }
+    100% { transform: scale(1); }
+}
+
+.puzzle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.puzzle-type-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    background: var(--theme-glow, var(--primary-glow));
+    color: var(--theme-accent, var(--primary));
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.puzzle-points {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--primary);
+}
+
+.status-solved {
+    color: var(--success);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-unsolved {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.puzzle-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.puzzle-flavor {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.puzzle-question {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 1.2rem;
+    margin-bottom: 1.2rem;
+    border-left: 3px solid var(--theme-accent, var(--primary));
+    line-height: 1.6;
+    white-space: pre-line;
+}
+
+.puzzle-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.answer-group {
+    display: flex;
+    gap: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+    transition: border-color 0.3s;
+}
+
+.answer-group:focus-within {
+    border-color: var(--theme-accent, var(--primary));
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.answer-input {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    outline: none;
+}
+
+.answer-input::placeholder {
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-submit {
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(135deg, var(--theme-accent, var(--primary)), #a8893a);
+    color: #0a0a0f;
+    border: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+}
+
+.btn-submit:hover {
+    filter: brightness(1.2);
+}
+
+.btn-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.puzzle-tools {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-hint {
+    padding: 0.6rem 1.2rem;
+    background: transparent;
+    border: 1px solid var(--card-border);
+    color: var(--text-secondary);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s;
+}
+
+.btn-hint:hover {
+    border-color: #f39c12;
+    color: #f39c12;
+    background: rgba(243, 156, 18, 0.1);
+}
+
+.btn-hint:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.hint-count {
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+.hint-display {
+    padding: 0.5rem 0;
+}
+
+.hint-text {
+    background: rgba(243, 156, 18, 0.1);
+    border: 1px solid rgba(243, 156, 18, 0.2);
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #f0c674;
+}
+
+.feedback-message {
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    display: none;
+}
+
+.feedback-message.success {
+    background: rgba(46, 204, 113, 0.15);
+    color: var(--success);
+    border: 1px solid rgba(46, 204, 113, 0.3);
+}
+
+.feedback-message.error {
+    background: rgba(231, 76, 60, 0.15);
+    color: var(--danger);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+/* Solved Overlay */
+.solved-overlay {
+    text-align: center;
+    padding: 1rem;
+    color: var(--success);
+}
+
+.solved-check {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Shake animation */
+.shake {
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    50% { transform: translateX(8px); }
+    75% { transform: translateX(-4px); }
+}
+
+/* Next Room Section */
+.next-room-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 2rem;
+    gap: 1.5rem;
+}
+
+.room-complete-message {
+    text-align: center;
+}
+
+.room-complete-message h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    color: var(--success);
+    margin-bottom: 0.5rem;
+}
+
+.room-complete-message p {
+    color: var(--text-secondary);
+}
+
+.btn-next-room {
+    padding: 1rem 3rem;
+    background: linear-gradient(135deg, var(--success), #27ae60);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: all 0.3s;
+    animation: glowPulse 2s infinite;
+}
+
+.btn-next-room:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(46, 204, 113, 0.3);
+}
+
+@keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(46, 204, 113, 0.2); }
+    50% { box-shadow: 0 0 40px rgba(46, 204, 113, 0.4); }
+}
+
+/* === VICTORY PAGE === */
+.victory-page {
+    background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.confetti {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: -20px;
+    opacity: 0;
+    animation: confettiFall 4s infinite ease-in;
+}
+
+.confetti-piece:nth-child(odd) {
+    border-radius: 50%;
+}
+
+@keyframes confettiFall {
+    0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+}
+
+.victory-container {
+    text-align: center;
+    z-index: 1;
+    padding: 2rem;
+    max-width: 700px;
+}
+
+.trophy-icon {
+    font-size: 5rem;
+    animation: bounce 1s ease infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.victory-title {
+    font-family: 'Cinzel', serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #FFD700, #FFA500, #FFD700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 6px;
+    margin-bottom: 0.5rem;
+}
+
+.victory-subtitle {
+    font-size: 1.3rem;
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s;
+}
+
+.stat-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-3px);
+}
+
+.stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.3rem;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.rank-section {
+    margin-bottom: 2.5rem;
+}
+
+.rank-section h2 {
+    font-family: 'Cinzel', serif;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: linear-gradient(135deg, rgba(201, 168, 76, 0.15), rgba(201, 168, 76, 0.05));
+    border: 2px solid var(--primary);
+    border-radius: 50px;
+    padding: 0.8rem 2.5rem;
+}
+
+.rank-icon {
+    font-size: 2rem;
+}
+
+.rank-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 3px;
+}
+
+.btn-play-again {
+    display: inline-block;
+    padding: 1rem 3rem;
+    background: linear-gradient(135deg, #c9a84c, #a8893a);
+    color: #0a0a0f;
+    text-decoration: none;
+    border-radius: 12px;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    transition: all 0.3s;
+}
+
+.btn-play-again:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px var(--primary-glow);
+}
+
+/* Fade in animation */
+.fade-in {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+    .game-title { font-size: 2.5rem; letter-spacing: 4px; }
+    .rooms-preview { flex-direction: column; }
+    .input-group { flex-direction: column; border-radius: 12px; }
+    .btn-start { justify-content: center; border-radius: 0 0 10px 10px; }
+    .game-features { flex-direction: column; gap: 0.8rem; }
+    .hud-bar { flex-direction: column; gap: 0.5rem; padding: 0.5rem 1rem; }
+    .hud-left, .hud-right { gap: 1rem; }
+    .puzzles-container { grid-template-columns: 1fr; padding: 1rem; }
+    .room-name { font-size: 1.8rem; }
+    .victory-title { font-size: 2.5rem; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
+}
